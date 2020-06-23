@@ -126,7 +126,7 @@ async def goto_dandiset_version(request, dataset, version):
         json_info = req.json()
         if json_info is not None:
             id = json_info['_id']
-            url = f"https://gui.dandiarchive.org/#/dandiset/{id}"
+            url = f"https://gui.dandiarchive.org/#/dandiset/{id}/{version}"
             if request.method == "HEAD":
                 return response.html(None, status=302, headers=make_header(url))
             return response.redirect(url)

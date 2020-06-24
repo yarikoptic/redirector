@@ -104,7 +104,7 @@ async def goto_public_dashboard(request):
 async def goto_dandiset(request, dataset):
     """Redirect to gui with dandiset identifier
     """
-    url = f"https://gui.dandiarchive.org/#/dandiset/{id}"
+    url = f"https://gui.dandiarchive.org/#/dandiset/{dataset:06d}"
     if request.method == "HEAD":
         return response.html(None, status=302, headers=make_header(url))
     return response.redirect(url)

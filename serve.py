@@ -4,7 +4,6 @@ from sanic import Sanic
 from sanic.log import logger
 from sanic import response
 from sanic_cors import CORS
-import requests
 
 production = 'DEV628cc89a6444' not in os.environ
 sem = None
@@ -103,34 +102,23 @@ async def goto_public_dashboard(request):
 
 @app.route("/dandiset/<dataset:int>", methods=['GET', 'HEAD'])
 async def goto_dandiset(request, dataset):
-    """Redirect to gui with retrieved folder ID
+    """Redirect to gui with dandiset identifier
     """
-    req = requests.get(
-        f"https://girder.dandiarchive.org/api/v1/dandi/{dataset:06d}")
-    if req.reason == 'OK':
-        json_info = req.json()
-        if json_info is not None:
-            id = json_info['_id']
-            url = f"https://gui.dandiarchive.org/#/dandiset/{id}"
-            if request.method == "HEAD":
-                return response.html(None, status=302, headers=make_header(url))
-            return response.redirect(url)
-    return response.text(f"dandi:{dataset:06d} not found.", status=404)
+    url = f"https://gui.dandiarchive.org/#/dandiset/{id}"
+    if request.method == "HEAD":
+        return response.html(None, status=302, headers=make_header(url))
+    return response.redirect(url)
 
 
 @app.route("/dandiset/<dataset:int>/<version>", methods=['GET', 'HEAD'])
 async def goto_dandiset_version(request, dataset, version):
-    req = requests.get(
-        f"https://girder.dandiarchive.org/api/v1/dandi/{dataset:06d}")
-    if req.reason == 'OK':
-        json_info = req.json()
-        if json_info is not None:
-            id = json_info['_id']
-            url = f"https://gui.dandiarchive.org/#/dandiset/{id}/{version}"
-            if request.method == "HEAD":
-                return response.html(None, status=302, headers=make_header(url))
-            return response.redirect(url)
-    return response.text(f"dandi:{dataset:06d}/{version} not found.", status=404)
+    """Redirect to gui with dandiset identifier and version
+    """
+    url = f"https://gui.dandiarchive.org/#/dandiset/{dataset:06d}/{version}"
+    if request.method == "HEAD":
+        return response.html(None, status=302, headers=make_header(url))
+    return response.redirect(url)
+
 
 if __name__ == "__main__":
     logger.info("Starting backend")
